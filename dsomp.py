@@ -18,13 +18,14 @@ def DS_OMP(Y,Phi,M,N,K,L1,L2,L2c):
     index=e.argsort()[::-1]
     column=index[0:L1]
     Full_Supports = np.zeros((K,L1,L2),dtype=complex)
-
+    ############ Finding the common row and common column support ################
     for c in range(L1):
         Yc=Y[:,:,column[c]]
         Yc=np.reshape(Yc,(T,K))
         Rc=Yc
         rowc=[]
         Hchat=np.zeros((N,K),dtype=complex)
+        ########## Double Structured Orthogonal Matching Pursuit ############
         if L2c>0:
             FullRow=np.zeros((L2,K),dtype=complex)
             for k in range(K):
@@ -36,7 +37,7 @@ def DS_OMP(Y,Phi,M,N,K,L1,L2,L2c):
                     e=np.square(np.absolute(np.matmul(Phi.T,rc)))
                     index=np.argmax(e) 
                     row.append(index)
-                    Phi_s=Phi[:,row]        #review
+                    Phi_s=Phi[:,row]        
                     hchat=np.zeros((N,1),dtype=complex)
                     hchat[row,:]=np.linalg.inv(Phi_s.T*Phi_s)*Phi_s.T*yc
                     rc=yc-np.matmul(Phi,hchat)
@@ -55,7 +56,7 @@ def DS_OMP(Y,Phi,M,N,K,L1,L2,L2c):
             Hchat=np.zeros((N,K),dtype=complex)
             Hchat[rowc,:]=np.linalg.inv(Phi_s.T*Phi_s)*Phi_s.T*Yc
             Rc=Yc-np.matmul(Phi,Hchat)
-            Hhat[:,:,column[c]]=Hchat  #same problem as up(solved)
+            Hhat[:,:,column[c]]=Hchat  
 
         for k in range(K):
             k
